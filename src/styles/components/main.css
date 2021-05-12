@@ -1,0 +1,37 @@
+/* .Oee__main-content main {
+	background: -webkit-linear-gradient(to right, #4CA1AF, #2C3E50);  
+	background: linear-gradient(to right, #4CA1AF, #2C3E50);
+
+} */
+
+
+
+.wrapper {
+	align-items: stretch;
+	display: flex;
+	height: 100vh;
+	width: 100%;
+}
+
+.content {
+	overflow: auto;
+}
+
+main {
+	overflow: auto;
+}
+
+
+@media (max-width: 600px) {
+  /* .main-content aside {
+		height: auto;
+		
+	} */
+	
+
+	/* .main-content {
+		display: flex;
+
+		min-height: 100vh;
+	} */
+}
