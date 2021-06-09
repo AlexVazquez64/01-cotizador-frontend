@@ -24,6 +24,15 @@ export const cotizacionAddNew = ( Event ) => ({
   payload: Event
 });
 
+export const cotizacionOpenPDF = ( resp ) => ({
+  type: types.cotizacionOpenPDF,
+  payload: window.open(resp.url)
+});
+
+export const cotizacionSendMailPDF = ( resp ) => ({
+  type: types.cotizacionSendMailPDF,
+});
+
 export const cotizacionUpdated = ( Event ) => ({
   type: types.cotizacionUpdated,
   payload: Event

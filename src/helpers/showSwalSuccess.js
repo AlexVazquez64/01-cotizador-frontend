@@ -1,10 +1,9 @@
 import Swal from "sweetalert2";
 
-export const showSwalError = ( text ) => {
+export const showSwalSuccess = ( text ) => {
 
   Swal.fire({
-    icon: 'error',
-    title: 'Error',
+    icon: 'success',
     text,
     showCloseButton: true,
     showCancelButton: false,

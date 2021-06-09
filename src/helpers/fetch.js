@@ -6,7 +6,16 @@ const fetchWithoutToken = ( enpoint, data, method = 'GET' ) => {
   const url = `${ baseUrl }/${ enpoint }`;
 
   if ( method === 'GET' ) {
-    return fetch( url );
+    return fetch( url, {
+      // headers: {
+      //   'Access-Control-Allow-Origin': '*',
+      //   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
+      // }
+      // mode: 'no-cors',
+      headers: {
+        'Content-type': 'application/pdf'
+      },
+    } );
   } else {
     return fetch( url, {
       method,

@@ -8,6 +8,8 @@ import {
   detallesCloseModal,
 } from '../../../actions/Detalles/detallesAction';
 
+import { cotizacionSetActive } from '../../../actions/Cotizaciones/cotizacionesActions';
+
 import {
   detalleStartAddNew,
   detalleStartUpdate
@@ -18,7 +20,6 @@ import { customStyles } from '../../../helpers/center-modal-styles';
 import useForm from '../../../hooks/useForm';
 
 import '../../../styles/components/_modal.css';
-import { articuloStartLoading } from '../../../actions/Articulos/articulos';
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
@@ -32,10 +33,13 @@ const DetalleModal = ( props ) => {
     activeDetalle
   } = useSelector( state => state.detalles );
 
-  const { activeCotizacion } = useSelector( state => state.cotizaciones );
+  const { activeCotizacion, cotizaciones } = useSelector( state => state.cotizaciones );
+  
+  let lastCotizacion = cotizaciones.map( ( item ) => item ).pop()
+
   const { articulos } = useSelector( state => state.articulos );
 
-  const lastID = detalles.map( ( item ) => item.id ).pop()
+  const lastID = detalles.map( ( item ) => item.id ).pop();
 
   const {
     modalOpen,
@@ -58,7 +62,10 @@ const DetalleModal = ( props ) => {
   } = formValues;
 
   if ( activeCotizacion ) {
-    cotizacion_id = activeCotizacion.id
+    cotizacion_id = activeCotizacion?.id
+    lastCotizacion = cotizaciones.filter( item => item.id === parseInt(activeCotizacion?.id)).pop()
+  } else {
+    cotizacion_id = lastCotizacion?.id
   }
 
   const detalleArticulo = articulos.filter( item => item.id === parseInt(articulo_id)).pop()
@@ -70,8 +77,9 @@ const DetalleModal = ( props ) => {
 
   useEffect(() => {
 
-    dispatch( articuloStartLoading() );
-
+    // dispatch( articuloStartLoading() );
+    // dispatch( cotizacionSetActive( lastCotizacion ) );
+    // dispatch ( detalleStartLoading() );
     ( activeDetalle ) ? setValues( activeDetalle ) : setValues( initState );
 
   }, [ activeDetalle, setValues, initState, dispatch ])
@@ -84,7 +92,8 @@ const DetalleModal = ( props ) => {
 
   const handleSubmitForm = ( e ) => {
     e.preventDefault();
-
+    
+    
     if ( activeDetalle ) {
       dispatch( detalleStartUpdate({
         ...formValues,
@@ -100,8 +109,22 @@ const DetalleModal = ( props ) => {
       }) );
     }
 
+    dispatch( cotizacionSetActive( lastCotizacion ) );
+
+    
+
     handleCloseModal();
   }
+
+  // const handleOnClickGuardar = () => {
+  //   Swal.fire({
+  //     position: 'center',
+  //     icon: 'success',
+  //     text: 'Se ha guardado con éxito',
+  //     showConfirmButton: true,
+  //   });
+  // }
+  
 
   return (
     <Modal
@@ -194,6 +217,7 @@ const DetalleModal = ( props ) => {
               <button
                 type="submit"
                 className="btn btn-block btn-primary"
+
               >
                 Guardar
               </button>

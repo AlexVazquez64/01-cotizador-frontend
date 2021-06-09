@@ -1,15 +1,24 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import PropTypes from 'prop-types';
 
 import { useTable, useRowSelect } from 'react-table';
 
+import moment from 'moment';
+
 const Table = ( props ) => {
+
+  const { clientes } = useSelector( state => state.cliente )
 
   const {
     columnas,
     filas,
     handleOnSelectRow,
     handleDelete,
+    handleOpenPDF,
+    handleSendMailPDF,
+    path,
   } = props;
 
   const IndeterminateCheckbox = React.forwardRef(
@@ -20,9 +29,37 @@ const Table = ( props ) => {
       React.useEffect(() => {
         resolvedRef.current.indeterminate = indeterminate
       }, [resolvedRef, indeterminate]);
+
+      // console.log(rest.setactive)
   
       return (
         <>
+          <button
+            className="btn btn-success"
+            onClick={ () => handleSendMailPDF( rest.setactive ) }
+            ref={ resolvedRef }
+            { ...rest }
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Enviar PDF"
+            hidden={ ( path === '/clientes' || path === '/articulos' ) ? true : false }
+          >
+            <i className="fas fa-paper-plane"></i>
+          </button>
+
+          <button
+            className="btn btn-danger"
+            onClick={ () => handleOpenPDF( rest.setactive ) }
+            ref={ resolvedRef }
+            { ...rest }
+            data-toggle="tooltip"
+            data-placement="top"
+            title="PDF"
+            hidden={ ( path === '/clientes' || path === '/articulos' ) ? true : false }
+          >
+            <i className="fas fa-file-pdf"></i>
+          </button>
+
           <button
             className="btn btn-info"
             onClick={ () => handleOnSelectRow( rest.setactive ) }
@@ -107,7 +144,7 @@ const Table = ( props ) => {
   return (
     <div className="overflow-auto">
       <table
-        className="table  table-sm table-xl table-bordered border-white table-striped table-hover" {...getTableProps()}
+        className="table table-sm table-md table-lg table-xl table-bordered border-white table-striped table-hover" {...getTableProps()}
       >
         <thead className="text-center align-middle">
           {// Loop over the header rows
@@ -140,35 +177,23 @@ const Table = ( props ) => {
                   return (
                     <td
                       className="text-center align-middle"
-                      {...cell.getCellProps()}
+                      { ...cell.getCellProps() }
                     >
-                      {// Render the cell contents
-                      cell.render('Cell')}
+                      { // Render the cell contents
+                        ( cell.column.id === 'cliente_id' ) ?
+                          clientes.filter( cliente => cliente.id === cell.value).pop()?.nombre :
+                          ( cell.column.id === 'fecha_validez' ) ?
+                          moment( cell.value ).format( 'DD[-]MMM[-]YYYY' ) :
+                          cell.render('Cell')
+                      }
                     </td>
                   )
-                  
                 })}
               </tr>
-              
             )
           })}
         </tbody>
       </table>
-      {/* <p>Selected Rows: {Object.keys(selectedRowIds).length}</p>
-      <pre>
-        <code>
-          {JSON.stringify(
-            {
-              selectedRowIds: selectedRowIds,
-              'selectedFlatRows[].original': selectedFlatRows.map(
-                d => d.original
-              ),
-            },
-            null,
-            2
-          )}
-        </code>
-      </pre> */}
     </div>
   )
 }
@@ -178,7 +203,6 @@ Table.propTypes = {
   filas: PropTypes.array.isRequired,
   handleOnSelectRow: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-
 }
 
 export default Table

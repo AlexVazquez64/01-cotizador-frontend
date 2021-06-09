@@ -15,8 +15,6 @@ const useForm = ( initialState = {} ) => {
       [ target.name ]: target.value,
       
     });
-
-    console.log(values)
   };
 
   return [ values, handeInputChange, reset, setValues ];

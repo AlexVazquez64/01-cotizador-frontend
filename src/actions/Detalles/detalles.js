@@ -21,12 +21,12 @@ export const detalleStartAddNew = ( event ) => {
         dispatch( detalleAddNew( event ) );
         dispatch( detalleStartLoading() );
 
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          text: body.message,
-          showConfirmButton: true,
-        });
+        // Swal.fire({
+        //   position: 'center',
+        //   icon: 'success',
+        //   text: body.message,
+        //   showConfirmButton: true,
+        // });
 
       } else {
         Swal.fire({
@@ -120,22 +120,15 @@ export const detalleStartDelete = ( event ) => {
 
 export const detalleStartLoading = () => {
   return async ( dispatch ) => {
-
     try {
-
       const resp = await fetchWithoutToken('detalles');
       const body = await resp.json();
-
-      console.log( body )
-
-      console.log( body.Detalles )
-
       const detalles = prepareEvents( body.Detalles );
-      console.log( detalles )
+      
       dispatch( detalleLoaded( detalles ) );
 
     } catch ( error ) {
-      console.log( error )
+      console.error( error )
     }
 
   }

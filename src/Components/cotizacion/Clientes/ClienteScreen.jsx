@@ -18,6 +18,7 @@ import {
 
 import Table from '../../../helpers/Table';
 import ClienteModal from './ClienteModal';
+import { paths } from '../../../helpers/paths'
 
 import '../../../styles/components/_setup.css';
 
@@ -59,7 +60,7 @@ const ClienteScreen = () => {
           className="btn btn-primary"
           onClick={ handleOpenModal }
         >
-          Crear nuevo Cliente
+          Nuevo
         </button>
       </div>
 
@@ -68,6 +69,7 @@ const ClienteScreen = () => {
         filas={ clientes }
         handleDelete={ handleDelete }
         handleOnSelectRow={ handleOnSelectRow }
+        path={ paths.clientes }
       />
 
       <ClienteModal

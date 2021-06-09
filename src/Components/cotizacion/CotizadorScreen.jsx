@@ -20,9 +20,9 @@ const CotizadorScreen = ( props ) => {
       <div className="content">
         {
           {
-            '/': <ClienteScreen /> ,
+            '/': <ClienteScreen pathname={pathname} />,
             '/articulos': <ArticuloScreen />,
-            '/cotizaciones': <CotizacionScreen />
+            '/cotizaciones': <CotizacionScreen pathname={pathname} />
           }[ pathname ]
         }
       </div>

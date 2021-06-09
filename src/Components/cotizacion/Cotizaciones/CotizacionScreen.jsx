@@ -9,6 +9,8 @@ import {
 import {
   cotizacionStartDelete,
   cotizacionStartLoading,
+  cotizacionStartPDF,
+  sendMailPDFStart,
 } from '../../../actions/Cotizaciones/cotizaciones';
 
 import {
@@ -20,10 +22,14 @@ import Table from '../../../helpers/Table';
 
 import CotizacionModal from './CotizacionModal';
 
-import '../../../styles/components/_setup.css';
 import { detalleStartDelete, detalleStartLoading } from '../../../actions/Detalles/detalles';
 
-const CotizacionScreen = () => {
+import { clienteStartLoading } from '../../../actions/Clientes/clientes';
+import { articuloStartLoading } from '../../../actions/Articulos/articulos';
+
+import '../../../styles/components/_setup.css';
+
+const CotizacionScreen = ( props ) => {
 
   const dispatch = useDispatch();
 
@@ -33,14 +39,11 @@ const CotizacionScreen = () => {
     activeCotizacion
   } = useSelector( state => state.cotizaciones );
 
-  const { detalles } = useSelector( state => state.detalles );
-
-  console.log(detalles);
-
-
   useEffect(() => {
     dispatch( detalleStartLoading() );
     dispatch( cotizacionStartLoading() );
+    dispatch( clienteStartLoading() );
+    dispatch( articuloStartLoading() );
   }, [ dispatch ])
 
   const handleOpenModal = () => {
@@ -52,11 +55,16 @@ const CotizacionScreen = () => {
     dispatch( cotizacionesOpenModal() );
   }
 
+  const handleOpenPDF = ( e ) => {
+    dispatch( cotizacionStartPDF( e ) );
+  }
+
+  const handleSendMailPDF = ( e ) => {
+    dispatch( sendMailPDFStart( e ) );
+  }
+
   const handleDelete = ( e ) => {
-
-      dispatch( detalleStartDelete( e ) );
-
-    
+    dispatch( detalleStartDelete( e ) );
     dispatch( cotizacionStartDelete( e ) );
   }
 
@@ -64,7 +72,7 @@ const CotizacionScreen = () => {
     <div className="setup__vista">
       <h1 className="text-center setup__h1-mb">Cotizaciones</h1>
 
-      <div className="text-end setup__mb">
+      <div className="setup__mb">
         <button
           className="btn btn-primary"
           onClick={ handleOpenModal }
@@ -78,6 +86,9 @@ const CotizacionScreen = () => {
         filas={ cotizaciones }
         handleDelete={ handleDelete }
         handleOnSelectRow={ handleOnSelectRow }
+        handleOpenPDF={ handleOpenPDF }
+        handleSendMailPDF={ handleSendMailPDF }
+        pathname={ props.pathname }
       />
 
       <CotizacionModal

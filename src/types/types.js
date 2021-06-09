@@ -40,6 +40,9 @@ export const types = {
   cotizacionDeleted: '[cotizaciones] Delete',
   cotizacionesLoaded: '[cotizaciones] Loaded',
 
+  cotizacionOpenPDF: '[cotizaciones] PDF',
+  cotizacionSendMailPDF: '[cotizaciones] Send PDF',
+
   // Detalles
   detallesOpenModal: '[detalle] Open modal',
   detallesCloseModal: '[detalle] Close modal',

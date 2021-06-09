@@ -25,12 +25,12 @@ const ClienteModal = ( props ) => {
 
   const dispatch = useDispatch();
 
-  const { activeCliente } = useSelector( state => state.cliente );
-
   const {
-    modalOpen,
-    initState
-  } = props;
+    activeCliente,
+    modalOpen
+  } = useSelector( state => state.cliente );
+
+  const { initState } = props;
 
   const [
     formValues,
@@ -64,7 +64,6 @@ const ClienteModal = ( props ) => {
 
   const handleSubmitForm = ( e ) => {
     e.preventDefault();
-
       if ( activeCliente ) {
         dispatch( clienteStartUpdate({
           ...formValues,
@@ -72,10 +71,8 @@ const ClienteModal = ( props ) => {
       } else {
         dispatch( clienteStartAddNew({
           ...formValues,
-          // id: new Date().getTime(),
         }) );
       }
-
     handleCloseModal();
   }
 
@@ -94,34 +91,35 @@ const ClienteModal = ( props ) => {
           <h3 className="auth__title">{ ( activeCliente ) ? `Editar Cliente`  : `Nuevo Cliente` }</h3>
           <hr/>
           <form
-            onSubmit={ handleSubmitForm }
+            autoComplete="off"
             className="animate__animated animate__fadeIn animate__faster"
+            onSubmit={ handleSubmitForm }
           >
-
             <div className="mb-2">
-              <label htmlFor="name">Nombre</label>
-                <input
-                  className="form-control"
-                  name="nombre"
-                  required
-                  onChange={ handleInputChange }
-                  placeholder="Nombre"
-                  type="text"
-                  value={ nombre }
-                />
+              <label htmlFor="name">Nombre de la empresa</label>
+              <input
+                className="form-control"
+                name="nombre"
+                required
+                onChange={ handleInputChange }
+                placeholder="Nombre"
+                type="text"
+                value={ nombre }
+              />
             </div>
 
             <div className="row mb-2">
-              <div className="col-md-4 ">
-                <label htmlFor="rfc">RFC</label>
+              {/* Contacto */}
+              <div className="col-md-4 mb-2">
+                <label htmlFor="contacto">Contacto</label>
                 <input
                   className="form-control"
-                  name="rfc"
+                  name="contacto"
                   required
                   onChange={ handleInputChange }
-                  placeholder="RFC"
+                  placeholder="Contacto"
                   type="text"
-                  value={ rfc }
+                  value={ contacto }
                 />
               </div>
 
@@ -138,16 +136,16 @@ const ClienteModal = ( props ) => {
                 />
               </div>
 
+              {/* Telefono de contacto */}
               <div className="col-md-4">
-                <label htmlFor="telefono">Teléfono</label>
+                <label htmlFor="telefonoContacto">Teléfono Contacto</label>
                 <input
                   className="form-control"
-                  name="telefono"
-                  required
+                  name="telefono_contacto"
                   onChange={ handleInputChange }
-                  placeholder="Teléfono"
+                  placeholder="Teléfono Contacto"
                   type="phone"
-                  value={ telefono }
+                  value={ telefono_contacto }
                 />
               </div>
             </div>
@@ -157,7 +155,6 @@ const ClienteModal = ( props ) => {
               <input
                 className="form-control"
                 name="direccion"
-                required
                 onChange={ handleInputChange }
                 placeholder="Dirección"
                 type="text"
@@ -166,29 +163,27 @@ const ClienteModal = ( props ) => {
             </div>
 
             <div className="row mb-2">
-              <div className="col-md-4 mb-2">
-                <label htmlFor="contacto">Contacto</label>
+              <div className="col-md-4 ">
+                <label htmlFor="rfc">RFC</label>
                 <input
                   className="form-control"
-                  name="contacto"
-                  required
+                  name="rfc"
                   onChange={ handleInputChange }
-                  placeholder="Contacto"
+                  placeholder="RFC"
                   type="text"
-                  value={ contacto }
+                  value={ rfc }
                 />
               </div>
 
               <div className="col-md-4">
-                <label htmlFor="telefonoContacto">Teléfono Contacto</label>
+                <label htmlFor="telefono">Teléfono</label>
                 <input
                   className="form-control"
-                  name="telefono_contacto"
-                  required
+                  name="telefono"
                   onChange={ handleInputChange }
-                  placeholder="Teléfono Contacto"
+                  placeholder="Teléfono"
                   type="phone"
-                  value={ telefono_contacto }
+                  value={ telefono }
                 />
               </div>
 
@@ -197,15 +192,12 @@ const ClienteModal = ( props ) => {
                 <input
                   className="form-control"
                   name="descuento"
-                  required
                   onChange={ handleInputChange }
                   placeholder="Descuento"
                   type="number"
-                  
                   value={ descuento }
                 />
               </div>
-
             </div>
 
             <div className="d-grid gap-2 mt-3">
@@ -213,8 +205,8 @@ const ClienteModal = ( props ) => {
                 type="submit"
                 className="btn btn-block btn-primary"
               >
-              Guardar
-            </button>
+                Guardar
+              </button>
             </div>
           </form>
         </div>

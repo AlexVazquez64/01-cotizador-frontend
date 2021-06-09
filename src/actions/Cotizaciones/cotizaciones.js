@@ -1,5 +1,6 @@
 import Swal from 'sweetalert2';
 
+import moment from 'moment';
 import { fetchWithoutToken } from '../../helpers/fetch';
 import { prepareEvents } from '../../helpers/prepareEvents';
 
@@ -8,7 +9,83 @@ import {
   cotizacionDeleted,
   cotizacionUpdated,
   cotizacionesLoaded,
+  cotizacionOpenPDF,
+  cotizacionSendMailPDF,
 } from './cotizacionesActions';
+
+moment().format();
+
+export const cotizacionStartPDF = ( event ) => {
+  return async ( dispatch ) => {
+    try {
+      console.log('Entró al try de cotizacionStartPDF')
+
+      const resp = await fetchWithoutToken( `cotizaciones/cotizacion-${ event.id }-${ moment( event.createdAt ).format( 'DD[-]MMM[-]YY' ) }.pdf`, event, 'GET' );
+
+      console.log( resp )
+
+      if ( resp.ok ) {
+
+        dispatch( cotizacionOpenPDF( resp ) );
+
+        // dispatch(cotizacionStartLoading());
+        
+        // Swal.fire({
+        //   position: 'center',
+        //   icon: 'success',
+        //   text: body.message,
+        //   showConfirmButton: true,
+        // });
+
+      } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          text: 'Error al entrar a cotizacionStartPDF',
+          showConfirmButton: true,
+        });
+      }
+
+    } catch ( error ) {
+      // Swal.fire('Error', error, 'error');
+      console.log('Se pasó al catch', error)
+    }
+  }
+}
+
+export const sendMailPDFStart = ( event ) => {
+  return async ( dispatch ) => {
+    try {
+      console.log('Entró al try de sendMailPDFStart')
+
+      const resp = await fetchWithoutToken( `sendMail/cotizaciones/${ event.id }`, event, 'GET' );
+
+      console.log( resp )
+
+      if ( resp.ok ) {
+
+        dispatch( cotizacionSendMailPDF(resp) );
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          text: 'Se ha enviado con éxito',
+          showConfirmButton: true,
+        });
+
+      } else {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          text: 'Error al entrar a sendMailPDFStart',
+          showConfirmButton: true,
+        });
+      }
+
+    } catch ( error ) {
+      console.log('Se pasó al catch', error)
+    }
+  }
+}
 
 export const cotizacionStartAddNew = ( event ) => {
   return async ( dispatch, getState ) => {
@@ -58,12 +135,12 @@ export const cotizacionStartUpdate = (event) => {
         dispatch(cotizacionUpdated(event));
         dispatch(cotizacionStartLoading());
         
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          text: body.message,
-          showConfirmButton: true,
-        });
+        // Swal.fire({
+        //   position: 'center',
+        //   icon: 'success',
+        //   text: body.message,
+        //   showConfirmButton: true,
+        // });
 
       } else {
         Swal.fire({

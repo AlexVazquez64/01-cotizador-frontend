@@ -1,5 +1,5 @@
-// Clientes
 
+// Clientes
 export const clientesColumn = [
   {
     Header: 'Nombre',
@@ -44,7 +44,6 @@ export const clientesDataModal = {
   direccion: '',
   telefono_contacto: '',
   descuento: 0,
-
 }
 
 // Artículos
@@ -67,10 +66,6 @@ export const articulosColumns = [
     accessor: 'tipo_articulo',
   },
   {
-    Header: 'Descripción larga',
-    accessor: 'descripcion_larga',
-  },
-  {
     Header: 'Precio unitario',
     accessor: 'precio_unitario',
   },
@@ -86,15 +81,21 @@ export const articulosDataModal = {
   descripcion: '',
   unidad_venta: '',
   tipo_articulo: '',
-  descripcion_larga: '',
   precio_unitario: 0,
   costo: 0,
-
 }
 
 // Cotizaciones
 
 export const cotizacionesColumns = [
+  {
+    Header: 'Folio',
+    accessor: 'folio', // accessor is the "key" in the data
+  },
+  {
+    Header: 'Cliente',
+    accessor: `cliente_id`, // accessor is the "key" in the data
+  },
   {
     Header: 'Descripción',
     accessor: 'descripcion', // accessor is the "key" in the data
@@ -106,8 +107,9 @@ export const cotizacionesColumns = [
 ]
 
 export const cotizacionesDataModal = {
-  id: 1,
-  cliente_id: 0,
+  id: 0,
+  folio: 0,
+  cliente_id: null,
   descripcion: '',
   fecha_validez: '',
 }
@@ -132,5 +134,4 @@ export const detalleDataModal = {
   cantidad: 0,
   precio_unitario: 0,
   importe: 0,
-
 }

@@ -17,6 +17,16 @@ const initialState = {
 export const cotizacionesReducer = (state = initialState, action) => {
 
   switch ( action.type  ) {
+    case types.cotizacionOpenPDF:
+      return {
+        ...state,
+      }
+
+      case types.cotizacionSendMailPDF:
+      return {
+        ...state,
+      }
+
     case types.cotizacionesOpenModal:
       return {
         ...state,

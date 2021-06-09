@@ -8,7 +8,7 @@ const Sidebar = () => {
     <aside id="sidebar">
       <div className="sidebar-header">
         <h3 className="">
-          <span className="">Cotizador</span>
+          <span className="">Cotizador RCI</span>
         </h3>
       </div>
 

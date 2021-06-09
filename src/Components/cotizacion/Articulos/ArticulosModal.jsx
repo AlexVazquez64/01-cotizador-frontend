@@ -45,10 +45,8 @@ const ArticulosModal = ( props ) => {
     descripcion,
     unidad_venta,
     tipo_articulo,
-    descripcion_larga,
     precio_unitario,
     costo,
-
   } = formValues;
 
   useEffect(() => {
@@ -65,19 +63,17 @@ const ArticulosModal = ( props ) => {
 
   const handleSubmitForm = ( e ) => {
     e.preventDefault();
-
-      if ( activeArticulo ) {
-        dispatch( articuloStartUpdate({
-          ...formValues,
-        }) );
-      } else {
-        console.log(formValues);
-        dispatch( articuloStartAddNew({
-          ...formValues,
-          // id: new Date().getTime(),
-        }) );
-      }
-
+    if ( activeArticulo ) {
+      dispatch( articuloStartUpdate({
+        ...formValues,
+      }) );
+    } else {
+      console.log(formValues);
+      dispatch( articuloStartAddNew({
+        ...formValues,
+        // id: new Date().getTime(),
+      }) );
+    }
     handleCloseModal();
   }
 
@@ -96,21 +92,21 @@ const ArticulosModal = ( props ) => {
           <h3 className="auth__title">{ ( activeArticulo ) ? `Editar articulo`  : `Nuevo articulo` }</h3>
           <hr/>
           <form
-            onSubmit={ handleSubmitForm }
+            autoComplete="off"
             className="animate__animated animate__fadeIn animate__faster"
+            onSubmit={ handleSubmitForm }
           >
-
             <div className="mb-2">
               <label htmlFor="name">Nombre</label>
-                <input
-                  className="form-control"
-                  name="nombre"
-                  required
-                  onChange={ handleInputChange }
-                  placeholder="Nombre"
-                  type="text"
-                  value={ nombre }
-                />
+              <input
+                className="form-control"
+                name="nombre"
+                required
+                onChange={ handleInputChange }
+                placeholder="Nombre"
+                type="text"
+                value={ nombre }
+              />
             </div>
 
             <div className="row mb-2">
@@ -169,19 +165,6 @@ const ArticulosModal = ( props ) => {
               </div>
             </div>
 
-            <div className="mb-2">
-              <label htmlFor="descripcion_larga">Descripción larga</label>
-              <textarea
-                className="form-control"
-                name="descripcion_larga"
-                required
-                onChange={ handleInputChange }
-                placeholder="Descripción larga"
-                type="text"
-                value={ descripcion_larga }
-              />
-            </div>
-
             <div className="row mb-2">
               <div className="col-md-4 mb-2">
                 <label htmlFor="precio_unitario">Precio unitario</label>
@@ -191,7 +174,7 @@ const ArticulosModal = ( props ) => {
                   required
                   onChange={ handleInputChange }
                   placeholder="Precio unitario"
-                  type="text"
+                  type="number"
                   value={ precio_unitario }
                 />
               </div>
@@ -208,14 +191,13 @@ const ArticulosModal = ( props ) => {
                   value={ costo }
                 />
               </div>
-
             </div>
 
             <div className="d-grid gap-2 mt-3">
               <input
                 type="submit"
                 className="btn btn-block btn-primary"
-                value="Save"
+                value="Guardar"
               />
             </div>
           </form>

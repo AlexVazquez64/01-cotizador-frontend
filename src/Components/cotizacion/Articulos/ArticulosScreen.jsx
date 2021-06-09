@@ -11,15 +11,16 @@ import {
   articulosColumns
 } from '../../../helpers/dataTables';
 
-import Table from '../../../helpers/Table';
-import ArticulosModal from './ArticulosModal';
-
-import '../../../styles/components/_setup.css';
-
 import {
   articuloStartDelete,
   articuloStartLoading
 } from '../../../actions/Articulos/articulos';
+
+import Table from '../../../helpers/Table';
+import ArticulosModal from './ArticulosModal';
+import { paths } from '../../../helpers/paths'
+
+import '../../../styles/components/_setup.css';
 
 const ArticuloScreen = () => {
 
@@ -30,8 +31,6 @@ const ArticuloScreen = () => {
     modalOpen,
     activeArticulo
   } = useSelector( state => state.articulos );
-
-  // const cli = useSelector( state => state.articulo );
 
   useEffect(() => {
     dispatch( articuloStartLoading() );
@@ -53,13 +52,12 @@ const ArticuloScreen = () => {
   return (
     <div className="setup__vista">
       <h1 className="text-center setup__h1-mb">Articulos</h1>
-
       <div className="text-end setup__mb">
         <button
           className="btn btn-primary"
           onClick={ handleOpenModal }
         >
-          Crear nuevo articulo
+          Nuevo
         </button>
       </div>
 
@@ -68,6 +66,7 @@ const ArticuloScreen = () => {
         filas={ articulos }
         handleDelete={ handleDelete }
         handleOnSelectRow={ handleOnSelectRow }
+        path={ paths.articulos }
       />
 
       <ArticulosModal
