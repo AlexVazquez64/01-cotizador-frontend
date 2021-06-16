@@ -29,8 +29,6 @@ const Table = ( props ) => {
       React.useEffect(() => {
         resolvedRef.current.indeterminate = indeterminate
       }, [resolvedRef, indeterminate]);
-
-      // console.log(rest.setactive)
   
       return (
         <>
@@ -164,6 +162,8 @@ const Table = ( props ) => {
         </thead>
         {/* Apply the table body props */}
         <tbody {...getTableBodyProps()}>
+
+          
           {// Loop over the table rows
           rows.map(row => {
             // Prepare the row for display

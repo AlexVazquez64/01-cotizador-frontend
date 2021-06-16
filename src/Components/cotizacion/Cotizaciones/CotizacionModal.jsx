@@ -20,9 +20,11 @@ import {
 
 import { clienteStartLoading } from '../../../actions/Clientes/clientes'
 
+import ClienteModal from '../Clientes/ClienteModal'
 // Actions del detalle
 
 import { detallesOpenModal } from '../../../actions/Detalles/detallesAction'
+import { clientesOpenModal } from '../../../actions/Clientes/clientesActions'
 
 import {
   detalleStartDelete,
@@ -38,13 +40,11 @@ import { clientesDataModal, detalleDataModal } from '../../../helpers/dataTables
 import useForm from '../../../hooks/useForm'
 
 import { customStyles } from '../../../helpers/center-modal-styles'
+import { showSwalSuccess } from '../../../helpers/showSwalSuccess'
 
 import '../../../styles/components/_modal.css'
 import '../../../styles/components/cotizaciones.css'
-import { showSwalSuccess } from '../../../helpers/showSwalSuccess'
-
-import { clientesOpenModal } from '../../../actions/Clientes/clientesActions'
-import ClienteModal from '../Clientes/ClienteModal'
+import '../../../styles/loader/loader.css'
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root')
@@ -96,8 +96,6 @@ const CotizacionModal = ( props ) => {
 
   const clienteId = useRef(null);
 
-  console.log(formValues);
-
   if (cotizaciones.length === 0) {
     folio += 1;
   } else if ( cotizaciones.length > 0 && activeCotizacion === null ) {
@@ -107,17 +105,10 @@ const CotizacionModal = ( props ) => {
   }
 
   const { articulos } = useSelector( state => state.articulos )
-  console.log(clientes);
 
-  const cliente = clientes.map((item, index) => item.nombre);
-  console.log(cliente);
+  const clienteActive = clientes.filter(item => item.id === cliente_id )
 
-  const clienteNombreActive = clientes.filter(cli => cli.id === cliente_id )
-
-  console.log(clienteNombreActive);
-
-  const clienteNombre = clienteNombreActive.map( item => item.nombre  )
-  console.log(clienteNombre);
+  const clienteNombre = clienteActive.map( item => item.nombre  )
 
   useEffect(() => {
     dispatch( clienteStartLoading() );
@@ -126,7 +117,6 @@ const CotizacionModal = ( props ) => {
 
   const handleOpenModalDetalles = () => {
     dispatch( detallesOpenModal() )
-    console.log('Entro a openModalDetalles')
   }
 
   const handleOpenModalClientes = () => {
@@ -137,10 +127,11 @@ const CotizacionModal = ( props ) => {
     dispatch( sendMailPDFStart( e ) );
   }
 
-  const handleInputChangeCliente = () => {
-    cliente_id = clienteId.current.id;
-    formValues.cliente_id = clienteId.current.id
-    // console.log(clienteId.current.id);
+  const handleInputChangeCliente = ( ) => {
+    setValues({
+      ...formValues,
+      cliente_id: clienteId.current.id
+    })
   }
 
   const handleCloseModal = () => {
@@ -148,8 +139,6 @@ const CotizacionModal = ( props ) => {
     dispatch( cotizacionesCloseModal() )
     dispatch( cotizacionClearActive() )
   }
-
-  
 
   const handleDelete = ( e ) => {
     dispatch( detalleStartDelete( e ) )
@@ -245,14 +234,15 @@ const CotizacionModal = ( props ) => {
                 </select> */}
 
                 <input
-                  // defaultValue={ cliente_id }
+                  defaultValue={ clienteNombre }
                   disabled={ ( activeCotizacion ) ? true : false }
                   className="form-control"
                   list="cliente_id"
                   name="cliente_id"
                   onChange={ handleInputChangeCliente }
                   placeholder='Selecciona la empresa'
-                  value={ clienteNombre }
+                  // value={ clienteNombre }
+                  id={ cliente_id }
                 />
                 
                 <datalist id="cliente_id">
@@ -265,7 +255,7 @@ const CotizacionModal = ( props ) => {
                       <option
                         key={ item.id }
                         ref={ clienteId }
-                        value={item.nombre}
+                        value={ item.nombre }
                         id={ item.id }
                       >
                         { item.nombre }

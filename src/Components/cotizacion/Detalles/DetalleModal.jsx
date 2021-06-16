@@ -15,11 +15,16 @@ import {
   detalleStartUpdate
 } from '../../../actions/Detalles/detalles';
 
+import ArticulosModal from '../Articulos/ArticulosModal';
+
 import { customStyles } from '../../../helpers/center-modal-styles';
+import { articulosOpenModal } from '../../../actions/Articulos/articulosAction';
 
 import useForm from '../../../hooks/useForm';
 
 import '../../../styles/components/_modal.css';
+import { articulosDataModal } from '../../../helpers/dataTables';
+import { articuloStartLoading } from '../../../actions/Articulos/articulos';
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
@@ -32,15 +37,22 @@ const DetalleModal = ( props ) => {
     detalles,
     activeDetalle
   } = useSelector( state => state.detalles );
-
-  const { activeCotizacion, cotizaciones } = useSelector( state => state.cotizaciones );
+  
+  const {
+    activeCotizacion,
+    cotizaciones
+  } = useSelector( state => state.cotizaciones );
   
   let lastCotizacion = cotizaciones.map( ( item ) => item ).pop()
 
-  const { articulos } = useSelector( state => state.articulos );
+  const {
+    articulos,
+    modalOpenArticulo,
+    activeArticulo,
+  } = useSelector( state => state.articulos );
 
   const lastID = detalles.map( ( item ) => item.id ).pop();
-
+  
   const {
     modalOpen,
     initState
@@ -77,7 +89,7 @@ const DetalleModal = ( props ) => {
 
   useEffect(() => {
 
-    // dispatch( articuloStartLoading() );
+    dispatch( articuloStartLoading() );
     // dispatch( cotizacionSetActive( lastCotizacion ) );
     // dispatch ( detalleStartLoading() );
     ( activeDetalle ) ? setValues( activeDetalle ) : setValues( initState );
@@ -90,9 +102,12 @@ const DetalleModal = ( props ) => {
     dispatch( detalleClearActive() );
   }
 
+  const handleOpenModalArticulos = () => {
+    dispatch( articulosOpenModal() )
+  }
+
   const handleSubmitForm = ( e ) => {
     e.preventDefault();
-    
     
     if ( activeDetalle ) {
       dispatch( detalleStartUpdate({
@@ -110,122 +125,127 @@ const DetalleModal = ( props ) => {
     }
 
     dispatch( cotizacionSetActive( lastCotizacion ) );
-
-    
-
     handleCloseModal();
   }
 
-  // const handleOnClickGuardar = () => {
-  //   Swal.fire({
-  //     position: 'center',
-  //     icon: 'success',
-  //     text: 'Se ha guardado con éxito',
-  //     showConfirmButton: true,
-  //   });
-  // }
-  
-
   return (
-    <Modal
-      className="modal overflow-auto"
-      overlayClassName="modal-fondo"
-      closeTimeoutMS={ 200 }
-      isOpen={ modalOpen }
-      onRequestClose={ handleCloseModal }
-      shouldCloseOnOverlayClick={ true }
-      style={ customStyles }
-    >
-      <div className="row">
-        <div className="col-md-12">
-          <h3 className="auth__title">{ ( activeDetalle ) ? `Editar articulos`  : `Agregar articulos` }</h3>
-          <hr/>
-          <form
-            onSubmit={ handleSubmitForm }
-            className="animate__animated animate__fadeIn animate__faster"
-          >
+    <>
+      <Modal
+        className="modal overflow-auto"
+        overlayClassName="modal-fondo"
+        closeTimeoutMS={ 200 }
+        isOpen={ modalOpen }
+        onRequestClose={ handleCloseModal }
+        shouldCloseOnOverlayClick={ true }
+        style={ customStyles }
+      >
+        <div className="row">
+          <div className="col-md-12">
+            <h3 className="auth__title">{ ( activeDetalle ) ? `Editar articulos`  : `Agregar articulos` }</h3>
+            <hr/>
+            <form
+              onSubmit={ handleSubmitForm }
+              className="animate__animated animate__fadeIn animate__faster"
+            >
 
-            <div className="mb-2">
-              <label htmlFor="articulo_id">Articulo</label>
-              <select
-                className="form-control"
-                defaultValue={ articulo_id }
-                id="articulo_id"
-                name="articulo_id"
-                onChange={ handleInputChange }
-                type="number"
-              >
-                <option defaultValue style={{ display: 'none' }}>
-                { ( activeDetalle ) ? `${ activeDetalle.articulo }`  : `Selecciona el articulo` }
-                </option>
-
-                {
-                  articulos.map( ( item ) => (
-                    
-                  <option
-                    key={ item.id }
-                    value={ item.id }
+              <div className="mb-2">
+                <label htmlFor="articulo_id">Articulo</label>
+                <button
+                    className="btn btn-sm btn-success ml-3"
+                    onClick={ handleOpenModalArticulos }
+                    type='button'
                   >
-                    { item.nombre }
-                  </option>
-                  ))
-                }
-
-              </select>
-            </div>
-
-            <div className="row mb-2">
-              <div className="col-md-4">
-              <label htmlFor="cantidad">Cantidad</label>
-                <input
+                    Nuevo Articulo
+                    <i className="fas fa-plus ml-2"></i>
+                  </button>
+                <select
                   className="form-control"
-                  name="cantidad"
-                  required
+                  defaultValue={ articulo_id }
+                  id="articulo_id"
+                  name="articulo_id"
                   onChange={ handleInputChange }
-                  placeholder="Cantidad"
                   type="number"
-                  value={ cantidad }
-                />
+                >
+                  <option defaultValue style={{ display: 'none' }}>
+                  { ( activeDetalle ) ? `${ activeDetalle.articulo }`  : `Selecciona el articulo` }
+                  </option>
+
+                  {
+                    articulos.map( ( item ) => (
+                      
+                    <option
+                      key={ item.id }
+                      value={ item.id }
+                    >
+                      { item.nombre }
+                    </option>
+                    ))
+                  }
+
+                </select>
               </div>
 
-              <div className="col-md-4">
-                <label htmlFor="precio_unitario">Precio unitario</label>
-                <input
-                  className="form-control"
-                  id="articulo"
-                  name="articulo"
-                  readOnly
-                  value={ precio_unitario }
-                />
+              <div className="row mb-2">
+                <div className="col-md-4">
+                <label htmlFor="cantidad">Cantidad</label>
+                  <input
+                    className="form-control"
+                    name="cantidad"
+                    required
+                    onChange={ handleInputChange }
+                    placeholder="Cantidad"
+                    type="number"
+                    value={ cantidad }
+                  />
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="precio_unitario">Precio unitario</label>
+                  <input
+                    className="form-control"
+                    id="articulo"
+                    name="articulo"
+                    readOnly
+                    value={ precio_unitario }
+                  />
+                </div>
+
+                <div className="col-md-4">
+                  <label htmlFor="importe">Importe</label>
+                  <input
+                    className="form-control"
+                    name="importe"
+                    onChange={ handleInputChange }
+                    type="Number"
+                    value={ importe }
+                    readOnly
+                  />
+                </div>
               </div>
 
-              <div className="col-md-4">
-                <label htmlFor="importe">Importe</label>
-                <input
-                  className="form-control"
-                  name="importe"
-                  onChange={ handleInputChange }
-                  type="Number"
-                  value={ importe }
-                  readOnly
-                />
+
+              <div className="d-grid gap-2 mt-3">
+                <button
+                  type="submit"
+                  className="btn btn-block btn-primary"
+
+                >
+                  Guardar
+                </button>
               </div>
-            </div>
-
-
-            <div className="d-grid gap-2 mt-3">
-              <button
-                type="submit"
-                className="btn btn-block btn-primary"
-
-              >
-                Guardar
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+
+      <ArticulosModal
+        activeEvents={ activeArticulo }
+        modalOpen={ modalOpenArticulo }
+        initState={ articulosDataModal }
+      />
+
+
+    </>
   )
 }
 

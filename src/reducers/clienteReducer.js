@@ -16,7 +16,8 @@ const initialState = {
     //   descuento: 15
     // }
   ],
-  activeCliente: null
+  activeCliente: null,
+  clientesLoaded: null
 };
 
 export const clienteReducer = (state = initialState, action) => {
@@ -74,7 +75,8 @@ export const clienteReducer = (state = initialState, action) => {
     case types.clientesLoaded:
       return {
         ...state,
-        clientes: [ ...action.payload ]
+        clientes: [ ...action.payload ],
+        clientesLoaded: true
       }
       
     default:

@@ -11,7 +11,8 @@ const initialState = {
 
     // }
   ],
-  activeCotizacion: null
+  activeCotizacion: null,
+  cotizacionesLoaded: null
 };
 
 export const cotizacionesReducer = (state = initialState, action) => {
@@ -79,7 +80,8 @@ export const cotizacionesReducer = (state = initialState, action) => {
     case types.cotizacionesLoaded:
       return {
         ...state,
-        cotizaciones: [ ...action.payload ]
+        cotizaciones: [ ...action.payload ],
+        cotizacionesLoaded: true
       }
       
     default:

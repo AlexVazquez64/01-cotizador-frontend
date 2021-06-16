@@ -10,10 +10,11 @@ const useForm = ( initialState = {} ) => {
 
   const handeInputChange = ({ target }) => {
 
+    // (target.name === 'cliente_id') ? console.log('Si es cliente_id') : console.log('no es cliente_id')
+
     setValues({
       ...values,
-      [ target.name ]: target.value,
-      
+      [ target.name ]: (target.name === 'cliente_id') ? target.id : target.value,
     });
   };
 

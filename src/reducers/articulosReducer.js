@@ -16,7 +16,8 @@ const initialState = {
 
     // }
   ],
-  activeArticulo: null
+  activeArticulo: null,
+  articulosLoaded: null
 };
 
 export const articulosReducer = (state = initialState, action) => {
@@ -74,7 +75,8 @@ export const articulosReducer = (state = initialState, action) => {
     case types.articulosLoaded:
       return {
         ...state,
-        articulos: [ ...action.payload ]
+        articulos: [ ...action.payload ],
+        articulosLoaded: true
       }
       
     default:

@@ -26,10 +26,10 @@ const ArticulosModal = ( props ) => {
 
   const dispatch = useDispatch();
 
-  const { activeArticulo } = useSelector( state => state.articulos );
+  const { activeArticulo, modalOpen } = useSelector( state => state.articulos );
 
   const {
-    modalOpen,
+    
     initState
   } = props;
 
@@ -68,10 +68,8 @@ const ArticulosModal = ( props ) => {
         ...formValues,
       }) );
     } else {
-      console.log(formValues);
       dispatch( articuloStartAddNew({
         ...formValues,
-        // id: new Date().getTime(),
       }) );
     }
     handleCloseModal();

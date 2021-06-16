@@ -28,15 +28,18 @@ import { clienteStartLoading } from '../../../actions/Clientes/clientes';
 import { articuloStartLoading } from '../../../actions/Articulos/articulos';
 
 import '../../../styles/components/_setup.css';
+import '../../../styles/loader/loader.css';
 
 const CotizacionScreen = ( props ) => {
 
   const dispatch = useDispatch();
+  
 
   const {
     cotizaciones,
     modalOpen,
-    activeCotizacion
+    activeCotizacion,
+    cotizacionesLoaded
   } = useSelector( state => state.cotizaciones );
 
   useEffect(() => {
@@ -81,6 +84,8 @@ const CotizacionScreen = ( props ) => {
         </button>
       </div>
 
+      {( cotizacionesLoaded ) ? 
+
       <Table
         columnas={ cotizacionesColumns }
         filas={ cotizaciones }
@@ -90,6 +95,8 @@ const CotizacionScreen = ( props ) => {
         handleSendMailPDF={ handleSendMailPDF }
         pathname={ props.pathname }
       />
+      :
+      <div className="lds-dual-ring"></div>}
 
       <CotizacionModal
         activeEvents={ activeCotizacion }

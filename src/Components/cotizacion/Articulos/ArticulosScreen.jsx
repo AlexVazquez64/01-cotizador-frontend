@@ -21,6 +21,7 @@ import ArticulosModal from './ArticulosModal';
 import { paths } from '../../../helpers/paths'
 
 import '../../../styles/components/_setup.css';
+import '../../../styles/loader/loader.css';
 
 const ArticuloScreen = () => {
 
@@ -29,7 +30,8 @@ const ArticuloScreen = () => {
   const {
     articulos,
     modalOpen,
-    activeArticulo
+    activeArticulo,
+    articulosLoaded
   } = useSelector( state => state.articulos );
 
   useEffect(() => {
@@ -60,6 +62,7 @@ const ArticuloScreen = () => {
           Nuevo
         </button>
       </div>
+      {( articulosLoaded ) ? 
 
       <Table
         columnas={ articulosColumns }
@@ -68,7 +71,9 @@ const ArticuloScreen = () => {
         handleOnSelectRow={ handleOnSelectRow }
         path={ paths.articulos }
       />
-
+      :
+      <div className="lds-dual-ring"></div>
+      }
       <ArticulosModal
         activeEvents={ activeArticulo }
         modalOpen={ modalOpen }

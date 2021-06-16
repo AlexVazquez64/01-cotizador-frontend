@@ -21,6 +21,7 @@ import ClienteModal from './ClienteModal';
 import { paths } from '../../../helpers/paths'
 
 import '../../../styles/components/_setup.css';
+import '../../../styles/loader/loader.css';
 
 const ClienteScreen = () => {
 
@@ -29,7 +30,8 @@ const ClienteScreen = () => {
   const {
     clientes,
     modalOpen,
-    activeCliente
+    activeCliente,
+    clientesLoaded
   } = useSelector( state => state.cliente );
 
   // const cli = useSelector( state => state.cliente );
@@ -52,18 +54,21 @@ const ClienteScreen = () => {
   }
 
   return (
+    
     <div className="setup__vista">
       <h1 className="text-center setup__h1-mb">Clientes</h1>
-
+      
       <div className="text-end setup__mb">
         <button
           className="btn btn-primary"
           onClick={ handleOpenModal }
+          disabled={( clientes === [] ) ? true : false}
         >
           Nuevo
         </button>
       </div>
 
+      {( clientesLoaded ) ?
       <Table
         columnas={ clientesColumn }
         filas={ clientes }
@@ -71,7 +76,8 @@ const ClienteScreen = () => {
         handleOnSelectRow={ handleOnSelectRow }
         path={ paths.clientes }
       />
-
+      :
+      <div className="lds-dual-ring"></div>}
       <ClienteModal
         activeEvents={ activeCliente }
         modalOpen={ modalOpen }
@@ -79,6 +85,7 @@ const ClienteScreen = () => {
       />
 
     </div>
+    
   )
 }
 
