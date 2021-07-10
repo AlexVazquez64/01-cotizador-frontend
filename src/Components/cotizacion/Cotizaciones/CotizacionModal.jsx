@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Modal from 'react-modal';
@@ -49,29 +49,29 @@ import '../../../styles/loader/loader.css'
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root')
 
-const CotizacionModal = ( props ) => {
+const CotizacionModal = (props) => {
 
   const dispatch = useDispatch();
 
   const {
     activeCotizacion,
     cotizaciones
-  } = useSelector( state => state.cotizaciones )
+  } = useSelector(state => state.cotizaciones)
 
   let {
     clientes,
     modalOpenCliente,
     activeCliente
-  } = useSelector( state => state.cliente )
+  } = useSelector(state => state.cliente)
 
   const {
     activeDetalle,
     detalles
-  } = useSelector( state => state.detalles )
+  } = useSelector(state => state.detalles)
 
-  const detalleSelector = useSelector( ( state ) => state.detalles )
+  const detalleSelector = useSelector((state) => state.detalles)
 
-  const lastFolio = cotizaciones.map( ( item ) => item.folio ).pop()
+  const lastFolio = cotizaciones.map((item) => item.folio).pop()
 
   const folioRef = useRef();
 
@@ -85,83 +85,88 @@ const CotizacionModal = ( props ) => {
     handleInputChange,
     reset,
     setValues,
-  ] = useForm( initState );
+  ] = useForm(initState);
 
   let {
     folio,
     cliente_id,
+    cliente_nombre,
     descripcion,
     fecha_validez,
   } = formValues;
 
-  const clienteId = useRef(null);
+  
 
   if (cotizaciones.length === 0) {
     folio += 1;
-  } else if ( cotizaciones.length > 0 && activeCotizacion === null ) {
+  } else if (cotizaciones.length > 0 && activeCotizacion === null) {
     folio = lastFolio + 1
   } else {
     folio = activeCotizacion.folio
   }
 
-  const { articulos } = useSelector( state => state.articulos )
+  const { articulos } = useSelector(state => state.articulos)
 
-  const clienteActive = clientes.filter(item => item.id === cliente_id )
+  const clienteActive = clientes.filter(item => item.id === cliente_id)
 
-  const clienteNombre = clienteActive.map( item => item.nombre  )
+  const clienteNombre = clienteActive.map(item => item.nombre)
 
   useEffect(() => {
-    dispatch( clienteStartLoading() );
-    ( activeCotizacion ) ? setValues( activeCotizacion ) : setValues( initState );
-  }, [ activeCotizacion, setValues, initState, dispatch ])
+    dispatch(clienteStartLoading());
+    (activeCotizacion) ? setValues(activeCotizacion) : setValues(initState);
+  }, [activeCotizacion, setValues, initState, dispatch])
+
+  const clientesDispo = clientes.map((item) => item )
+
+  for (const cliente in clientesDispo) {
+    if (Object.hasOwnProperty.call(clientesDispo, cliente)) {
+      const element = clientesDispo[cliente];
+      if (element.nombre === cliente_nombre) {
+        formValues.cliente_id = element.id
+      }
+      
+    }
+  }
 
   const handleOpenModalDetalles = () => {
-    dispatch( detallesOpenModal() )
+    dispatch(detallesOpenModal())
   }
 
   const handleOpenModalClientes = () => {
-    dispatch( clientesOpenModal() )
+    dispatch(clientesOpenModal())
   }
 
-  const handleSendMailPDF = ( e ) => {
-    dispatch( sendMailPDFStart( e ) );
-  }
-
-  const handleInputChangeCliente = ( ) => {
-    setValues({
-      ...formValues,
-      cliente_id: clienteId.current.id
-    })
+  const handleSendMailPDF = (e) => {
+    dispatch(sendMailPDFStart(e));
   }
 
   const handleCloseModal = () => {
     reset()
-    dispatch( cotizacionesCloseModal() )
-    dispatch( cotizacionClearActive() )
+    dispatch(cotizacionesCloseModal())
+    dispatch(cotizacionClearActive())
   }
 
-  const handleDelete = ( e ) => {
-    dispatch( detalleStartDelete( e ) )
-    dispatch( detalleStartLoading() )
+  const handleDelete = (e) => {
+    dispatch(detalleStartDelete(e))
+    dispatch(detalleStartLoading())
   }
 
-  const handleSubmitForm = ( e ) => {
+  const handleSubmitForm = (e) => {
     e.preventDefault();
-    if ( activeCotizacion ) {
-      dispatch( cotizacionStartUpdate({
+    if (activeCotizacion) {
+      dispatch(cotizacionStartUpdate({
         ...formValues,
-      }) );
-      
-    } else if ( lastFolio ) {
-      dispatch( cotizacionStartAddNew({
+      }));
+    } else if (lastFolio) {
+      dispatch(cotizacionStartAddNew({
         ...formValues,
         folio: lastFolio + 1
-      }) );
+      }));
     } else {
-      dispatch( cotizacionStartAddNew({
+      dispatch(cotizacionStartAddNew({
         ...formValues,
         folio
-      }) );
+      }));
     }
   }
 
@@ -170,20 +175,20 @@ const CotizacionModal = ( props ) => {
       <Modal
         className="modal overflow-auto"
         overlayClassName="modal-fondo"
-        closeTimeoutMS={ 200 }
-        isOpen={ modalOpen }
-        onRequestClose={ handleCloseModal }
-        shouldCloseOnOverlayClick={ true }
-        style={ customStyles }
+        closeTimeoutMS={200}
+        isOpen={modalOpen}
+        onRequestClose={handleCloseModal}
+        shouldCloseOnOverlayClick={true}
+        style={customStyles}
       >
         <div className="row">
           <div className="col-md-12">
-            <h3 className="auth__title">{ ( activeCotizacion ) ? `Editar Cotización`  : `Nueva Cotización` }</h3>
-            <hr/>
+            <h3 className="auth__title">{(activeCotizacion) ? `Editar Cotización` : `Nueva Cotización`}</h3>
+            <hr />
             <form
               autoComplete='off'
               className="animate__animated animate__fadeIn animate__faster"
-              onSubmit={ handleSubmitForm }
+              onSubmit={handleSubmitForm}
             >
               <div className="mb-2">
                 <label htmlFor="folio">Folio</label>
@@ -192,10 +197,10 @@ const CotizacionModal = ( props ) => {
                   id="folio"
                   name="folio"
                   readOnly
-                  ref={ folioRef }
+                  ref={folioRef}
                   type="text"
-                  onChange={ () => handleInputChange }
-                  value={ folio }
+                  onChange={() => handleInputChange}
+                  value={folio}
                 />
               </div>
 
@@ -203,7 +208,7 @@ const CotizacionModal = ( props ) => {
                 <label htmlFor="cliente_id">Cliente</label>
                 <button
                   className="btn btn-sm btn-success ml-3"
-                  onClick={ handleOpenModalClientes }
+                  onClick={handleOpenModalClientes}
                   type='button'
                 >
                   Nuevo Cliente
@@ -234,48 +239,47 @@ const CotizacionModal = ( props ) => {
                 </select> */}
 
                 <input
-                  defaultValue={ clienteNombre }
-                  disabled={ ( activeCotizacion ) ? true : false }
+                  defaultValue={cliente_nombre}
+                  disabled={(activeCotizacion) ? true : false}
                   className="form-control"
-                  list="cliente_id"
-                  name="cliente_id"
-                  onChange={ handleInputChangeCliente }
+                  list="all_clients"
+                  name="cliente_nombre"
+                  onChange={handleInputChange}
                   placeholder='Selecciona la empresa'
-                  // value={ clienteNombre }
-                  id={ cliente_id }
+                  // value={ cliente_id }
+                  id={cliente_nombre}
                 />
-                
-                <datalist id="cliente_id">
+
+                <datalist id="all_clients">
                   <option defaultValue style={{ display: 'none' }}>
-                    { ( activeCotizacion ) ? `${ clienteNombre.nombre }`  : `Selecciona el cliente` }
+                    {(activeCotizacion) ? `${clienteNombre.nombre}` : `Selecciona el cliente`}
                   </option>
                   {
-                    
-                    clientes.map( ( item ) => (
+
+                    clientes.map((item) => (
                       <option
-                        key={ item.id }
-                        ref={ clienteId }
-                        value={ item.nombre }
-                        id={ item.id }
+                        key={item.nombre}
+                        value={item.nombre}
                       >
-                        { item.nombre }
+                        {item.nombre}
                       </option>
                     ))
                   }
                 </datalist>
-                
+
               </div>
 
               <div className="mb-2">
                 <label htmlFor="descripcion">Descripción</label>
                 <input
+                  disabled={(activeCotizacion) ? true : false}
                   className="form-control"
                   name="descripcion"
                   required
-                  onChange={ handleInputChange }
+                  onChange={handleInputChange}
                   placeholder="Descripción"
                   type="text"
-                  value={ descripcion }
+                  value={descripcion}
                 />
               </div>
 
@@ -283,20 +287,21 @@ const CotizacionModal = ( props ) => {
                 <div className="col-md-4">
                   <label htmlFor="fecha_validez">Fecha Validez</label>
                   <input
+                    disabled={(activeCotizacion) ? true : false}
                     className="form-control"
                     name="fecha_validez"
                     required
-                    onChange={ handleInputChange }
+                    onChange={handleInputChange}
                     placeholder="Fecha Validez"
                     type="Date"
-                    value={ fecha_validez }
+                    value={fecha_validez}
                   />
                 </div>
               </div>
 
               <button
                 className="btn btn-info ml-2 mb-3"
-                onClick={ handleOpenModalDetalles }
+                onClick={handleOpenModalDetalles}
               >
                 Agregar articulos
                 <i className="fas fa-plus ml-2"></i>
@@ -315,34 +320,34 @@ const CotizacionModal = ( props ) => {
                   </thead>
 
                   {
-                    detalles.map( item => (
-                      ( item.cotizacion_id === activeCotizacion?.id ) ?
-                      <tbody
-                        className="text-center"
-                        key={ item.id }
-                      >
-                        <tr>
-                          <th>{ item.cantidad }</th>
-                          <td>{ articulos.filter( articulo => articulo.id === parseInt(item.articulo_id)).pop().nombre }</td>
-                          <td>{ item.precio_unitario }</td>
-                          <td>{ item.importe }</td>
-                          <td>
-                            <button
-                              className="btn btn-danger"
-                              onClick={ () => handleDelete( item ) }
-                              type="button"
-                              data-toggle="tooltip"
-                              data-placement="top"
-                              title="Eliminar"
+                    detalles.map(item => (
+                      (item.cotizacion_id === activeCotizacion?.id) ?
+                        <tbody
+                          className="text-center"
+                          key={item.id}
+                        >
+                          <tr>
+                            <th>{item.cantidad}</th>
+                            <td>{articulos.filter(articulo => articulo.id === parseInt(item.articulo_id)).pop().nombre}</td>
+                            <td>{item.precio_unitario}</td>
+                            <td>{item.importe}</td>
+                            <td>
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => handleDelete(item)}
+                                type="button"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Eliminar"
 
-                            >
-                              <i className="fas fa-trash-alt"></i>
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                      :
-                      null
+                              >
+                                <i className="fas fa-trash-alt"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                        :
+                        null
                     ))
                   }
                 </table>
@@ -354,9 +359,9 @@ const CotizacionModal = ( props ) => {
                     <button
                       type="submit"
                       className="btn btn-block btn-primary"
-                      disabled={ ( activeCotizacion ) ? false : true }
+                      disabled={(activeCotizacion) ? false : true}
                       onClick={() => {
-                        showSwalSuccess( 'Se ha guardado correctamente' );
+                        showSwalSuccess('Se ha guardado correctamente');
                         handleCloseModal();
                       }}
                     >
@@ -370,9 +375,9 @@ const CotizacionModal = ( props ) => {
                     <button
                       type="submit"
                       className="btn btn-block btn-dark"
-                      disabled={ ( activeCotizacion ) ? false : true }
+                      disabled={(activeCotizacion) ? false : true}
                       onClick={() => {
-                        showSwalSuccess( 'Se ha guardado correctamente' );
+                        showSwalSuccess('Se ha guardado correctamente');
                         handleCloseModal();
                         handleSendMailPDF(formValues)
                       }}
@@ -389,7 +394,7 @@ const CotizacionModal = ( props ) => {
                     <button
                       type="button"
                       className="btn btn-block btn-danger"
-                      onClick={ handleCloseModal }
+                      onClick={handleCloseModal}
                     >
                       Salir
                     </button>
@@ -402,15 +407,15 @@ const CotizacionModal = ( props ) => {
       </Modal>
 
       <ClienteModal
-        activeEvents={ activeCliente }
-        modalOpen={ modalOpenCliente }
-        initState={ clientesDataModal }
+        activeEvents={activeCliente}
+        modalOpen={modalOpenCliente}
+        initState={clientesDataModal}
       />
 
       <DetalleModal
-        activeEvents={ activeDetalle }
-        modalOpen={ detalleSelector.modalOpen }
-        initState={ detalleDataModal }
+        activeEvents={activeDetalle}
+        modalOpen={detalleSelector.modalOpen}
+        initState={detalleDataModal}
       />
     </>
   )

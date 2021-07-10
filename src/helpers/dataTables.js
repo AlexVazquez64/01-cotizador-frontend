@@ -109,7 +109,8 @@ export const cotizacionesColumns = [
 export const cotizacionesDataModal = {
   id: 0,
   folio: 0,
-  cliente_id: null,
+  cliente_id: '',
+  cliente_nombre: '',
   descripcion: '',
   fecha_validez: '',
 }

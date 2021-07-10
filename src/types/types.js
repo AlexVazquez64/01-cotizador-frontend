@@ -55,4 +55,12 @@ export const types = {
   detalleDeleted: '[detalle] Delete',
   detalleLoaded: '[detalle] Loaded',
 
+  // AUTH
+
+  authCheckingFinish: '[auth] Finish checking login state',
+  authStartLogin: '[auth] Start login',
+  authLogin: '[auth] Login',
+  authStartRegister: '[auth] Start Register',
+  authLogout: '[auth] Logout',
+
 }
