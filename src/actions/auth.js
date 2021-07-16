@@ -37,8 +37,6 @@ export const startRegister = (nombre, email, password) => {
 
     if (body.ok) {
 
-      console.log(body)
-
       dispatch(login({
         uid: body.id,
         nombre: body.nombre

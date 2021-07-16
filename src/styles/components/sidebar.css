@@ -2,7 +2,11 @@
   
 }
 
-#sidebar {
+.btnSideBar {
+  margin-left: 70px;
+}
+
+.sidebar {
   min-width: 250px;
   max-width: 250px;
   background: #01588D;
@@ -10,42 +14,46 @@
   transition: all 0.3s;
 }
 
-#sidebar.active {
-  margin-left: -250px;
+.sidebar.active {
+  margin-left: -200px;
+}
+
+.Sidebar.collapsed {
+  width: 52px;
 }
 
 /* #sidebar.active {
   margin-left: -250px;
 } */
 
-#sidebar .sidebar-header {
-  padding: 20px;
+.sidebar .sidebar-header {
+  padding: 5px;
   background: #01588D;
 }
 
-#sidebar ul.components {
+.sidebar ul.components {
   padding: 20px 0;
   border-bottom: 1px solid #47748b;
 }
 
-#sidebar ul p {
+.sidebar ul p {
   color: #fff;
   padding: 10px;
 }
 
-#sidebar ul li a {
+.sidebar ul li a {
   padding: 10px;
   font-size: 1.1em;
   display: block;
   color: #fff;
 }
 
-#sidebar ul li a:hover {
+.sidebar ul li a:hover {
   color: #01588D;
   background: #fff;
 }
 
-#sidebar ul li.active>a,
+.sidebar ul li.active>a,
 a[aria-expanded="true"] {
   color: #fff;
   background: #6d7fcc;
@@ -77,16 +85,18 @@ ul ul a {
 }
 
 @media (max-width: 768px) {
-  #sidebar {
-      margin-left: -250px;
+  .sidebar {
+      margin-left: -200px;
   }
-  #sidebar.active {
+  .sidebar.active {
       margin-left: 0;
   }
-  #sidebarCollapse span {
+  .sidebarCollapse span {
       display: none;
   }
 }
+
+/* No se usa */
 
 /* .sidebar-navbar h3 {
   font-weight: normal;

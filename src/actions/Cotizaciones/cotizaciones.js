@@ -18,24 +18,12 @@ moment().format();
 export const cotizacionStartPDF = ( event ) => {
   return async ( dispatch ) => {
     try {
-      console.log('Entró al try de cotizacionStartPDF')
 
       const resp = await fetchWithoutToken( `cotizaciones/cotizacion-${ event.id }-${ moment( event.createdAt ).format( 'DD[-]MMM[-]YY' ) }.pdf`, event, 'GET' );
-
-      console.log( resp )
 
       if ( resp.ok ) {
 
         dispatch( cotizacionOpenPDF( resp ) );
-
-        // dispatch(cotizacionStartLoading());
-        
-        // Swal.fire({
-        //   position: 'center',
-        //   icon: 'success',
-        //   text: body.message,
-        //   showConfirmButton: true,
-        // });
 
       } else {
         Swal.fire({
@@ -48,7 +36,7 @@ export const cotizacionStartPDF = ( event ) => {
 
     } catch ( error ) {
       // Swal.fire('Error', error, 'error');
-      console.log('Se pasó al catch', error)
+      console.log('Hablar con el administrador: 1', error)
     }
   }
 }
@@ -56,11 +44,8 @@ export const cotizacionStartPDF = ( event ) => {
 export const sendMailPDFStart = ( event ) => {
   return async ( dispatch ) => {
     try {
-      console.log('Entró al try de sendMailPDFStart')
 
       const resp = await fetchWithoutToken( `sendMail/cotizaciones/${ event.id }`, event, 'GET' );
-
-      console.log( resp )
 
       if ( resp.ok ) {
 
@@ -82,7 +67,7 @@ export const sendMailPDFStart = ( event ) => {
       }
 
     } catch ( error ) {
-      console.log('Se pasó al catch', error)
+      console.log('Hablar con el administrador: 2', error)
     }
   }
 }
@@ -97,13 +82,6 @@ export const cotizacionStartAddNew = ( event ) => {
 
         dispatch( cotizacionAddNew( event ) );
         dispatch( cotizacionStartLoading() );
-
-        // Swal.fire({
-        //   position: 'center',
-        //   icon: 'success',
-        //   text: body.message,
-        //   showConfirmButton: true,
-        // });
 
       } else {
         Swal.fire({
@@ -135,13 +113,6 @@ export const cotizacionStartUpdate = (event) => {
         dispatch(cotizacionUpdated(event));
         dispatch(cotizacionStartLoading());
         
-        // Swal.fire({
-        //   position: 'center',
-        //   icon: 'success',
-        //   text: body.message,
-        //   showConfirmButton: true,
-        // });
-
       } else {
         Swal.fire({
           position: 'center',

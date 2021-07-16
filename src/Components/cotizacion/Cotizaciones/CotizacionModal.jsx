@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Modal from 'react-modal';
@@ -95,8 +95,6 @@ const CotizacionModal = (props) => {
     fecha_validez,
   } = formValues;
 
-  
-
   if (cotizaciones.length === 0) {
     folio += 1;
   } else if (cotizaciones.length > 0 && activeCotizacion === null) {
@@ -124,7 +122,6 @@ const CotizacionModal = (props) => {
       if (element.nombre === cliente_nombre) {
         formValues.cliente_id = element.id
       }
-      
     }
   }
 
@@ -215,29 +212,6 @@ const CotizacionModal = (props) => {
                   <i className="fas fa-plus ml-2"></i>
                 </button>
 
-                {/* <select
-                  className="form-control"
-                  id="cliente_id"
-                  name="cliente_id"
-                  onChange={ handleInputChange }
-                  defaultValue={ cliente_id }
-                  disabled={ ( activeCotizacion ) ? true : false }
-                >
-                <option defaultValue style={{ display: 'none' }}>
-                  { ( activeCotizacion ) ? `${ activeCotizacion.descripcion }`  : `Selecciona el cliente` }
-                </option>
-                  {
-                    clientes.map( ( item ) => (
-                      <option
-                        key={ item.id }
-                        value={ item.id }
-                      >
-                        { item.nombre }
-                      </option>
-                    ))
-                  }
-                </select> */}
-
                 <input
                   defaultValue={cliente_nombre}
                   disabled={(activeCotizacion) ? true : false}
@@ -266,7 +240,6 @@ const CotizacionModal = (props) => {
                     ))
                   }
                 </datalist>
-
               </div>
 
               <div className="mb-2">
@@ -354,7 +327,7 @@ const CotizacionModal = (props) => {
               </div>
 
               <div className="row">
-                <div className="col-3">
+                <div className="col-4">
                   <div className="d-grid gap-2 mt-3">
                     <button
                       type="submit"
@@ -370,7 +343,7 @@ const CotizacionModal = (props) => {
                   </div>
                 </div>
 
-                <div className="col-3">
+                <div className="col-4">
                   <div className="d-grid gap-2 mt-3">
                     <button
                       type="submit"
@@ -387,9 +360,9 @@ const CotizacionModal = (props) => {
                   </div>
                 </div>
 
-                <div className="col-3"></div>
+                <div className=""></div>
 
-                <div className="col-3">
+                <div className="col-4">
                   <div className="d-grid gap-2 mt-3">
                     <button
                       type="button"
