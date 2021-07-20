@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import {
   BrowserRouter as Router,
-  Redirect,
 } from "react-router-dom";
 
 import CotizadorScreen from '../Components/cotizacion/CotizadorScreen';
@@ -45,7 +44,7 @@ const AppRouter = () => {
             isAuthenticated={ isAutenticated }
           />
 
-          <Redirect to="/login" />
+          {/* <Redirect to="/login" /> */}
       </div>
     </Router>
   )

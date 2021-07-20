@@ -8,21 +8,21 @@ const fetchWithoutToken = ( enpoint, data, method = 'GET' ) => {
   console.log(url)
 
   if ( method === 'GET' ) {
-    return fetch( url)
-      // {
-      // headers: {
-      //   'Access-Control-Allow-Origin': '*',
-      //   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
-      // }
-      // mode: 'no-cors',
-      // headers: {
-      //   'Content-type': 'application/pdf'
-      // },
-    // } 
+    return fetch( url,
+      {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+        'Content-type': 'application/pdf'
+      },
+      mode: 'no-cors',
+    } )
   } else {
     return fetch( url, {
       method,
       headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
         'Content-type': 'application/json'
       },
       body: JSON.stringify( data )
